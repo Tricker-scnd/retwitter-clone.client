@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: theme.typography.fontFamily,
       resize: 'none',
       width: '95%',
-
+      maxHeight:'unset',
       '&:focus ~ div': {
         borderTop: '1px solid rgba(224 ,224 ,224 , 0.53)',
       },
@@ -124,11 +124,12 @@ export const TweetCreate: React.FC<TweetCreateProps> = ({
     if (e.currentTarget) {
       setTweetText(e.currentTarget.value);
       changeProgress();
-      if (tweetText.length <= letterLimit) {
-        setTweetBtnDisabled(false);
-      } else {
-        setTweetBtnDisabled(true);
-      }
+    }
+
+    if (e.currentTarget.value.length> 0 && tweetText.length <= letterLimit) {
+      setTweetBtnDisabled(false);
+    } else {
+      setTweetBtnDisabled(true);
     }
   };
 

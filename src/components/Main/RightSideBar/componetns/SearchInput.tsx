@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
     searchTextInput: {
       '& > div': {
         borderRadius: '26px',
+        border: 'none',
         backgroundColor: '#2f504a12',
       },
       '& >  .Mui-focused': {
@@ -21,12 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
 export const SearchInput = () => {
   const classes = useStyles();
 
   return (
-
     <TextField
       className={classes.searchTextInput}
       id="input-with-icon-textfield"
@@ -40,6 +39,7 @@ export const SearchInput = () => {
             <SearchRoundedIcon color="primary" />
           </InputAdornment>
         ),
-      }}/>
+      }}
+    />
   );
 };

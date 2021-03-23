@@ -98,7 +98,7 @@ interface TweetProps {
   textTweet: string;
 }
 
-export const Tweet: React.FC<TweetProps> = ({
+export const TweetItem: React.FC<TweetProps> = ({
   userInfo,
   textTweet,
 }: TweetProps): React.ReactElement => {

@@ -15,7 +15,8 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import CloseIcon from '@material-ui/icons/Close';
-import { TweetCreate } from './Tweet/create';
+import { TweetCreate } from '../Tweet/create';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'flex-start',
       justifyContent: 'center',
-      paddingTop:'30px',
+      paddingTop: '30px',
     },
     menuIcon: {
       fontSize: '30px',
@@ -94,6 +95,9 @@ const useStyles = makeStyles((theme: Theme) =>
         fontSize: '19px',
         fontWeight: 700,
       },
+      '& a': {
+        display: 'flex',
+      },
     },
     letfMenuItemAction: {
       display: 'flex',
@@ -137,7 +141,21 @@ const useStyles = makeStyles((theme: Theme) =>
       '& > div': {
         borderBottom: 'none',
         maxHeight: '400px',
-        overflow: 'scroll',
+        overflowY: 'scroll',
+
+        '&::-webkit-scrollbar': {
+          width: '0.6em',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(0,0,0,.4)',
+          outline: 'none',
+          borderRight: '2px solid #fff',
+
+        },
       },
       '& hr': {
         border: 'none',
@@ -198,7 +216,9 @@ export const SideBarMenu: React.FC<SideBarMenuProps> = ({
         <ul className={classes.leftMenuLinks}>
           <li className={classes.letfMenuLinksItem}>
             <IconButton aria-label="Logo" className={classes.logoButton}>
-              <MessageIcon color="primary" className={classes.mainLogo} />
+              <Link to="/">
+                <MessageIcon color="primary" className={classes.mainLogo} />
+              </Link>
             </IconButton>
           </li>
           <li className={classes.letfMenuLinksItem}>

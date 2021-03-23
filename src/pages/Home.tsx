@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Typography, AppBar, Toolbar, Hidden } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Tweet } from '../components/Main/Tweet';
-import { SideBarMenu } from '../components/Main/SideBarMenu';
+import { TweetItem } from '../components/Main/Tweet';
+import { SideBarMenu } from '../components/Main/LeftSideBar';
 import { TweetCreate } from '../components/Main/Tweet/create';
 import { RightSideBar } from '../components/Main/RightSideBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTweets } from '../store/ducks/tweets/actionCreators';
+import { LoadingState, TweetsState } from '../store/ducks/tweets/contracts/state';
+import { selectLoadingState, selectTweetsItems } from '../store/ducks/tweets/selectors';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     rightColumnGrid: {
-      marginTop: '12px',
+      paddingTop: '12px',
       padding: '0px 0px 0px 2px!important',
       backgroundColor: '#fff',
       flexGrow: 1,
@@ -70,11 +75,23 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     tweetsFeed: {},
+    TweetsLoader: {
+      display: 'block',
+      margin: '0 auto',
+    },
   }),
 );
 
 export const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchTweets());
+  }, [dispatch]);
+
+  const tweetsList: TweetsState['items'] = useSelector(selectTweetsItems);
+  const tweetsLoading: boolean = useSelector(selectLoadingState) === LoadingState.LOADING;
+
 
   const userInfo = {
     userName: 'Maikel Bill',
@@ -82,20 +99,15 @@ export const Home = () => {
     published: '01.02.2021',
     avatarUrl: 'https://pbs.twimg.com/profile_images/1246806429073387520/L8ZaoO8__x96.jpg',
   };
-  const TweetText = `Availability varies by region due to regulatory approval delays and/or Tesla internal
-  development testing. Note: word “Beta” is used to reduce complacency in usage set
-  <br></br>
-  <br></br>All software is first tested internally by Tesla simulation expectations
-  appropriately. All software is first tested internally by Tesla simulation QA drive
-  teams.`;
 
   return (
     <Container className={classes.baseWrapper} maxWidth="xl">
-      <Grid container className={classes.root} spacing={2}>
-        <Grid item xs={2} sm={3} md={3} lg={3} xl={2} className={classes.leftColumnGrid}>
+      <Grid container className={classes.root} justify="center">
+        <Grid item xs={2} sm={3} md={3} lg={2} xl={2} className={classes.leftColumnGrid}>
           <SideBarMenu userInfo={userInfo} />
         </Grid>
-        <Grid item xs={10} sm={9} md={7} lg={6} xl={7} className={classes.centerColumnGrid}>
+
+        <Grid item xs={10} sm={9} md={7} lg={4} xl={4} className={classes.centerColumnGrid}>
           <AppBar className={classes.feedColumnHeadBar} color="secondary">
             <Toolbar>
               <Typography variant="h6">Главная</Typography>
@@ -103,11 +115,16 @@ export const Home = () => {
           </AppBar>
           <TweetCreate userInfo={userInfo} />
           <div className={classes.tweetsFeed}>
-            {new Array(100).fill(1).map((p, i) => (
-              <Tweet userInfo={userInfo} textTweet={TweetText} key={userInfo.login + '_' + i} />
-            ))}
+            {tweetsLoading ? (
+              <CircularProgress className={classes.TweetsLoader} disableShrink />
+            ) : (
+              tweetsList.map((t, i) => (
+                <TweetItem userInfo={t.user} textTweet={t.text} key={t._id + '_' + i} />
+              ))
+            )}
           </div>
         </Grid>
+
         <Hidden smDown>
           <Grid item lg={3} xl={3} className={classes.rightColumnGrid}>
             <RightSideBar />

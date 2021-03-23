@@ -9,7 +9,7 @@ function App() {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-      <CssBaseline />
+        <CssBaseline />
         <Switch>
           <Route path="/signing" component={SignIn} />
           <Route path="/" component={Home} />

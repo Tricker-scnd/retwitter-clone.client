@@ -9,7 +9,8 @@ import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rightGridColumnWrapper: {
-      width: '94%',
+      maxWidth:'340px',
+      width: '100%',
       top: 0,
       position: 'sticky',
       paddingTop: '4px',
