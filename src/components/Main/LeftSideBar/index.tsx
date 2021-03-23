@@ -148,13 +148,12 @@ const useStyles = makeStyles((theme: Theme) =>
           borderRadius: '4px',
         },
         '&::-webkit-scrollbar-track': {
-          '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+          '-webkit-box-shadow': 'unset',
         },
         '&::-webkit-scrollbar-thumb': {
           backgroundColor: 'rgba(0,0,0,.4)',
           outline: 'none',
           borderRight: '2px solid #fff',
-
         },
       },
       '& hr': {
