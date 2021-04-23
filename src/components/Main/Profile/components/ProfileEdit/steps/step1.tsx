@@ -116,7 +116,6 @@ export const Step1 = ({ nextStep, edit }: ProfileEditProps) => {
     if (file) {
       edit({ avatar: file });
       const fileObj = new Blob([file]);
-      const stringblob = await fileObj.text();
       setAvatarBlob(fileObj);
     }
   };

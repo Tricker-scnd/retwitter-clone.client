@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import GifOutlinedIcon from '@material-ui/icons/GifOutlined';

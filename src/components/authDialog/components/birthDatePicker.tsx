@@ -74,7 +74,7 @@ export const BirthDatePicker = ({ setbirthDate, selectedDate }: any) => {
   useEffect(() => {
     setDaysInSelectedMonth(getDaysInMonth(new Date(selectedYear, selectedMonth)));
     setbirthDate(formatDateToString(selectedYear, Number(selectedMonth) + 1, selectedDay));
-  }, [selectedDay, selectedMonth, selectedYear]);
+  }, [selectedDay, selectedMonth, selectedYear, setbirthDate]);
 
   return (
     <div className={classes.birthDayBlock}>

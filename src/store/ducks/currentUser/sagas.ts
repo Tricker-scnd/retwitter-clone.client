@@ -17,7 +17,6 @@ import {
 import {
   AuthorizeResultState,
   AuthorizeState,
-  ProfileEditState,
   ProfileEditStatusState,
   SubscriptionState,
   SubState,
@@ -80,9 +79,7 @@ export function* EditProfileRequest({ payload }: EditProfileInterface) {
   try {
     const editProfileResutl: ProfileEditStatusState = yield call(UsersApi.editProfile, payload);
     console.log(editProfileResutl);
-  } catch (error) {
-    console.log('err', error);
-  }
+  } catch (error) {}
 }
 
 export function* getSubsRequest({ payload }: GetSubsListInterface) {

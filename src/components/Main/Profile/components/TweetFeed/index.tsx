@@ -3,19 +3,13 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
-import { selectCurrentUserInfo } from '../../../../../store/ducks/currentUser/selectors';
 import { Tweet } from '../../../../../store/ducks/tweets/contracts/state';
-import {
-  GetSpecialUserTweets,
-  SetSpecialUserTweets,
-} from '../../../../../store/ducks/users/actionCreators';
+import { GetSpecialUserTweets } from '../../../../../store/ducks/users/actionCreators';
 import { TweetItem } from '../../../Tweet';
 import { deleteTweet, setLikeRequest } from '../../../../../store/ducks/tweet/actionCreators';
 import { likeTweet } from '../../../../../services/api/TweetsApi';
 import { likeTweetInList } from '../../../../../store/ducks/tweets/actionCreators';
 import { NotificationAlert } from '../../../common/NotificationAlert';
-import { pinState } from '../../../../../store/ducks/tweet/contracts/state';
 import { pinTweet } from '../../../TweetFeed';
 import { selectSpecialUserInfo } from '../../../../../store/ducks/users/selectors';
 
@@ -82,10 +76,9 @@ export const TweetFeed: React.FC<tweetFeedProps> = ({ uId, tweetsList }) => {
 
   useEffect(() => {
     if (tweetsList?.length) {
-      const key = tweetsList.findIndex((t) => !!t.pinned);
-      if (key) {
+      const key = tweetsList.findIndex((t) => t.pinned === true);
+      if (key !== undefined) {
         setPinnedTweetListKey(key);
-        console.log(tweetsList[key]);
       }
     }
   }, [tweetsList]);
@@ -119,7 +112,7 @@ export const TweetFeed: React.FC<tweetFeedProps> = ({ uId, tweetsList }) => {
           <>
             <div className={classes.pinnedTweet}>
               <p className={classes.pinnedTweetTitle}>Закрепленный твит</p>
-              {!!pinnedTweetListKey && (
+              {pinnedTweetListKey !== null && (
                 <TweetItem
                   TweetInfo={tweetsList[pinnedTweetListKey]}
                   key={tweetsList[pinnedTweetListKey]._id}
@@ -158,6 +151,7 @@ export const TweetFeed: React.FC<tweetFeedProps> = ({ uId, tweetsList }) => {
                   />
                 );
               }
+              return null;
             })}
           </>
         ) : (

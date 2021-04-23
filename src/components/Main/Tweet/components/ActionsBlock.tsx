@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IconButton } from '@material-ui/core';
 import ChatBubbleOutlineRoundedIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
 import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded';
@@ -6,13 +6,8 @@ import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectTweetData } from '../../../../store/ducks/tweet/selectors';
 import { Tweet } from '../../../../store/ducks/tweets/contracts/state';
-import { setLikeRequest } from '../../../../store/ducks/tweet/actionCreators';
-import { likeTweet } from '../../../../services/api/TweetsApi';
 import { formatNumberLikes } from '../../../../utils/formatNumber';
-import { likeTweetInList } from '../../../../store/ducks/tweets/actionCreators';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,17 +64,12 @@ export const ActionsBlock = ({
   shareHandler,
 }: ActionsBlockProps): React.ReactElement => {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const retweetHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
   const answerHandler = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-  const replyHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };

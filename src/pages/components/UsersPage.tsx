@@ -50,12 +50,10 @@ export const UsersPage = () => {
   useEffect(() => {
     if (currentUser && tabPage === 0) dispatch(getSubscriptions(currentUser._id));
     if (currentUser && tabPage === 1) dispatch(getSubs(currentUser._id));
-  }, [tabPage, currentUser]);
+  }, [dispatch, tabPage, currentUser]);
 
   const subs = useSelector(selectSubscribersList);
   const subscriptions = useSelector(selectSubscriptionsList);
-
-  console.log(subs, subscriptions);
 
   return (
     <>

@@ -13,14 +13,7 @@ function App() {
   const { checkUser } = useAuth();
   useEffect(() => {
     checkUser();
-  }, []);
-
-  // TODO: 1)  Твиты с изображением   (+)
-  // 2) Актуальные темы               (+)
-  // 3) Поиск                         (+)
-  // 4) Подписки                      (+)
-
-  // ? 5) РЕТВИТ,КОМЕНТ  (ЛАЙК +) (ЗАКРЕП +)
+  }, [checkUser]);
 
   return (
     <React.Fragment>

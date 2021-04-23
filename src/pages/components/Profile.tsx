@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { MainTopBar } from '../../components/Main/common/MainTopBar';
-import { UsersApi } from '../../services/api/UsersApi';
-import { SpecialUser, SpecialUserLoadingState } from '../../store/ducks/users/contracts/state';
+import {} from '../../services/api/UsersApi';
+import { SpecialUserLoadingState } from '../../store/ducks/users/contracts/state';
 import { Profile } from '../../components/Main/Profile';
 import { GetSpecialUser, SetStatusSpecialUser } from '../../store/ducks/users/actionCreators';
 import { selectSpecialUserState } from '../../store/ducks/users/selectors';
@@ -34,7 +34,7 @@ export const ProfilePage = () => {
     return () => {
       dispatch(SetStatusSpecialUser(SpecialUserLoadingState.NEVER));
     };
-  }, [login]);
+  }, [dispatch, login]);
 
   const currentUserData = useSelector(selectCurrentUserInfo);
   const { user: userData, status: profileLoader } = useSelector(selectSpecialUserState);

@@ -8,7 +8,7 @@ import {
 } from './actionCreators';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { AddedTweetState, LoadingState, TweetsFetchResult } from './contracts/state';
-import { fetchAddTweet, getFavoriteTweets, getTweets } from '../../../services/api/TweetsApi';
+import { fetchAddTweet, getTweets } from '../../../services/api/TweetsApi';
 
 export function* tweetsSagaWatcher() {
   yield takeEvery(TweetsActionsType.FETCH_TWEETS, fetchTweetsRequest);
@@ -30,7 +30,7 @@ export function* addTweetRequest({ payload }: AddTweetActionInterface) {
 
     const formData = new FormData();
     formData.append('text', payload.text!);
-    payload.images.map((img: File) => {
+    payload.images.forEach((img: File) => {
       formData.append('images', img);
     });
 

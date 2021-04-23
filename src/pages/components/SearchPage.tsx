@@ -41,13 +41,13 @@ export const SearchPage = () => {
       setSearchQuery(query);
       dispatch(searchRequest(query));
     }
-  }, [query]);
+  }, [dispatch, query]);
 
   useEffect(() => {
     return () => {
       dispatch(resetSearch());
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

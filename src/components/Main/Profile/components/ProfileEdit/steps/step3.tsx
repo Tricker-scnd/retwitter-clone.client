@@ -1,21 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Typography,
-  Paper,
-  Avatar,
-  IconButton,
-  Grid,
-  Button,
-  Container,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  TextField,
-} from '@material-ui/core';
+import React from 'react';
+import { Button, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

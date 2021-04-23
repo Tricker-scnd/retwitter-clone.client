@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { CurrentUser } from '../../../../store/ducks/currentUser/contracts/state';
@@ -8,8 +8,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useDispatch } from 'react-redux';
 import { LogOutRequest } from '../../../../store/ducks/currentUser/actionCreators';
-import { useAuth } from '../../../../hooks/Auth.hook';
-import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,8 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-
-const handleClick = () => {};
 
 interface CurrentUserBlockProps {
   userInfo: CurrentUser;

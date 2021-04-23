@@ -61,7 +61,11 @@ export const ImagesAttachmentBlock = ({
               className={classes.attachRemoveButton}>
               <CloseIcon className={classes.RemoveIcon} />
             </IconButton>
-            <img src={URL.createObjectURL(url)} className={classes.attachImage} />
+            <img
+              src={URL.createObjectURL(url)}
+              className={classes.attachImage}
+              alt="uploaded i m a g e"
+            />
           </div>
         ))}
     </div>

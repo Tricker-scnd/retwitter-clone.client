@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { AuthApi } from '../../services/api/AuthApi';
@@ -33,7 +33,7 @@ export const ActivatePage = () => {
     AuthApi.ActivateAccount(hash).then(
       (result) => result.status !== 'success' && serVerifyError(true),
     );
-  }, []);
+  }, [hash]);
 
   useEffect(() => {}, []);
   return (

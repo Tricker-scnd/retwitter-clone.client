@@ -36,7 +36,7 @@ export const RegisterModal: React.FC<ModalProps> = ({
   const changeRegData = (newData: object) => {
     setRegData((prev) => ({ ...prev, ...newData }));
   };
-  
+
   const changeAutoSubscription = () => {
     setAutoSubscription((prev) => !prev);
   };

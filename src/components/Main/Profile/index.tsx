@@ -138,7 +138,6 @@ export const Profile = ({ userData, isOwner }: ProfileProps) => {
   const _subscribed = useSelector(selectCurrentUserSubscriptions)?.includes(userData!._id!);
   const [subscribed, setSubscribed] = useState(_subscribed);
 
-
   const handleChange = (event: any, newValue: number) => {
     setTabPage(newValue);
   };
@@ -164,7 +163,7 @@ export const Profile = ({ userData, isOwner }: ProfileProps) => {
     return () => {
       dispatch(SetSpecialUserTweets(null));
     };
-  }, []);
+  }, [dispatch, userData?._id]);
 
   return (
     <>

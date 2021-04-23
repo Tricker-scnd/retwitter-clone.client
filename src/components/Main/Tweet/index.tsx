@@ -1,9 +1,5 @@
 import React from 'react';
-import { Typography, Paper, Avatar, IconButton, Grid } from '@material-ui/core';
-import ChatBubbleOutlineRoundedIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
-import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
+import { Typography, Paper, Avatar, Grid } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { UserInfo } from './components/UserInfo';
@@ -179,7 +175,7 @@ export const TweetItem: React.FC<TweetProps> = ({
               <div className={classes.tweetImagesBlock} onClick={openGallery}>
                 {TweetInfo.images.map((url, i) => (
                   <div className={classes.tweetImagesBlockItem} key={url + i}>
-                    <img data-zoomable src={url} alt="image" />
+                    <img data-zoomable src={url} alt="tweet i m a g e" />
                   </div>
                 ))}
               </div>

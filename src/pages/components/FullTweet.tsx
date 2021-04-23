@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Paper, Avatar, IconButton, Grid } from '@material-ui/core';
+import { Typography, Paper, Avatar, Grid } from '@material-ui/core';
 import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
-import ChatBubbleOutlineRoundedIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
-import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
-import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -15,7 +10,7 @@ import {
   setLikeRequest,
   setTweet,
 } from '../../store/ducks/tweet/actionCreators';
-import { LoadingState, pinState } from '../../store/ducks/tweet/contracts/state';
+import { LoadingState } from '../../store/ducks/tweet/contracts/state';
 import { selectTweetData, selectTweetLoadingState } from '../../store/ducks/tweet/selectors';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { formatDate } from '../../utils/formatDate';
@@ -210,7 +205,7 @@ export const FullTweet: React.FC<TweetProps> = (): React.ReactElement => {
     return () => {
       dispatch(setTweet(undefined));
     };
-  }, [dispatch]);
+  }, [dispatch, params]);
 
   const likeHandler = (
     e: React.MouseEvent<HTMLElement>,
@@ -295,7 +290,7 @@ export const FullTweet: React.FC<TweetProps> = (): React.ReactElement => {
                 <div className={classes.tweetImagesBlock}>
                   {tweetData!.images.map((url, i) => (
                     <div className={classes.tweetImagesBlockItem} key={url + i}>
-                      <img data-zoomable src={url} alt="image" />
+                      <img data-zoomable src={url} alt="tweetImage" />
                     </div>
                   ))}
                 </div>

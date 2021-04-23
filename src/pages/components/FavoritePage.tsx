@@ -30,7 +30,7 @@ export const FavoritePage = () => {
 
   useEffect(() => {
     dispatch(fetchFavoriteTweets());
-  }, []);
+  }, [dispatch]);
 
   const tweetsList: Tweet[] = useSelector(selectFavoriteItems);
   const tweetsLoading: boolean = useSelector(selectFavoriteLoadingState) === LoadingState.LOADING;

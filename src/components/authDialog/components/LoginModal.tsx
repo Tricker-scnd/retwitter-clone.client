@@ -48,7 +48,7 @@ export const LoginModal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     openAuth && AuthStatus === AuthorizeResultState.SUCCESS && handleClose();
-  }, [AuthStatus]);
+  }, [AuthStatus, openAuth, handleClose]);
 
   return (
     <Dialog

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { axios as multipartAxios } from '../../core/axios';
 import { pinState } from '../../store/ducks/tweet/contracts/state';
 
-import { AddTweetState, Tweet } from '../../store/ducks/tweets/contracts/state';
+import { Tweet } from '../../store/ducks/tweets/contracts/state';
 import { SpecialUser } from '../../store/ducks/users/contracts/state';
 
 export const getTweets = () => {

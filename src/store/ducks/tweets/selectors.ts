@@ -1,4 +1,4 @@
-import { TweetsState, LoadingState, Tweet } from './contracts/state';
+import { LoadingState, Tweet } from './contracts/state';
 
 interface RootState {
   tweets: {

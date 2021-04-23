@@ -1,13 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  Typography,
-  Paper,
-  Avatar,
-  IconButton,
-  Grid,
   Button,
-  Container,
-  Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
@@ -15,7 +8,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

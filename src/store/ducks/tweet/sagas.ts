@@ -8,7 +8,6 @@ import {
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { LoadingState, TweetFetchResult } from './contracts/state';
 import { deleteTweet, getTweet, likeTweet, removeLikeTweet } from '../../../services/api/TweetsApi';
-import { fetchTweets } from '../tweets/actionCreators';
 import { fetchTweetsRequest } from '../tweets/sagas';
 
 export function* tweetSagaWatcher() {
