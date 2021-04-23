@@ -7,10 +7,15 @@ import ForumIcon from '@material-ui/icons/Forum';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import { Modal as AuthPopups } from '../components/authDialog';
 
+
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
     height: '100vh',
+
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column-reverse',
+    },
   },
   leftSide: {
     backgroundColor: 'rgb(57, 105, 105)',
@@ -29,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     width: '200%',
     height: '200%',
     position: 'absolute',
+
+    [theme.breakpoints.down('sm')]: {
+      transform: 'unset',
+    },
   },
   leftSideList: {
     listStyle: 'none',
@@ -52,6 +61,14 @@ const useStyles = makeStyles((theme) => ({
       color: '#fff',
       fontWeight: 600,
       fontSize: 20,
+
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '18px',
+      },
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      width: '300px',
     },
   },
   authSide: {
@@ -70,12 +87,20 @@ const useStyles = makeStyles((theme) => ({
 
     '& .auth-wrapper': {
       width: '400px',
+
+      [theme.breakpoints.down('sm')]: {
+        width: '300px',
+      },
     },
   },
   authTitleText: {
     fontSize: '30px',
     marginBottom: '50px',
     fontWeight: 700,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '22px',
+      marginBottom: '10px',
+    },
   },
   authTitleLabel: {
     fontSize: 14,
@@ -103,20 +128,62 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     display: 'block',
   },
-
-  birthDayBlock: {
-    marginTop: theme.spacing(4),
+  regStepTitleBlock: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    '& button': {
+      marginRight: '12px',
+      fontSize: '11px',
+    },
   },
-  formControlBirthDay: {
-    flex: '0 0 33%',
+  regStepTitle: {
+    paddingLeft: '0px',
+  },
+  stepRegWrapper: {
+    padding: '25px 10px 10px 10px',
+    '& label': {
+      marginLeft: '0px',
+    },
+    '& p': {
+      marginTop: '15px',
+      fontSize: '14px',
+    },
+  },
+  SuccessRegMessage: {
+    textAlign: 'center',
+    marginBottom: '15px',
+  },
+  InputErrorLabel: {
+    display: 'block',
+    color: '#d23f3f',
+    height: '20px',
+    width: '100%',
+    marginBottom: '10px',
+    fontWeight: 500,
+    fontSize: '16px',
+  },
+  AuthPopupContainer: {
+    width: '550px',
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+      minWidth: '320px',
+      '& *': {
+        fontSize: '12px',
+      },
+    },
+  },
+  rootPopupContainer: {
+    [theme.breakpoints.down('xs')]: {
+      '& div': {
+        margin: 0,
+      },
+    },
   },
 }));
 
 export const SignIn: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-
   const [openReg, setOpenReg] = React.useState(false);
   const [openAuth, setOpenAuth] = React.useState(false);
 
@@ -139,46 +206,50 @@ export const SignIn: React.FC = (): React.ReactElement => {
   };
 
   return (
-    <div className={classes.wrapper}>
-      <section className={classes.leftSide}>
-        <ChatBubbleIcon className={classes.leftSideBG} />
-        <ul className={classes.leftSideList}>
-          <li>
-            <SearchIcon />
-            <Typography variant="h6">Читайте интересные вам темы.</Typography>
-          </li>
-          <li>
-            <PeopleIcon />
-            <Typography variant="h6">Узнайте, о чем говорят в мире.</Typography>
-          </li>
-          <li>
-            <ForumIcon />
-            <Typography variant="h6">Присоеденяйтесь к общению.</Typography>
-          </li>
-        </ul>
-      </section>
-      <section className={classes.authSide}>
-        <div className="auth-wrapper">
-          <MessageIcon className={classes.mainLogoIcon} color="primary" />
-          <Typography variant="h3" className={classes.authTitleText}>
-            Узнайте, что происходит в мире прямо сейчас!
-          </Typography>
-          <Typography className={classes.authTitleLabel}>Присоеденяйтесь прямо сейчас!</Typography>
-          <Button variant="contained" color="primary" onClick={() => handleClickOpen('reg')}>
-            Зарегистрироватся
-          </Button>
-          <Button variant="outlined" color="primary" onClick={() => handleClickOpen('auth')}>
-            Войти
-          </Button>
-        </div>
-      </section>
+    <>
+      <div className={classes.wrapper}>
+        <section className={classes.leftSide}>
+          <ChatBubbleIcon className={classes.leftSideBG} />
+          <ul className={classes.leftSideList}>
+            <li>
+              <SearchIcon />
+              <Typography variant="h6">Читайте интересные вам темы.</Typography>
+            </li>
+            <li>
+              <PeopleIcon />
+              <Typography variant="h6">Узнайте, о чем говорят в мире.</Typography>
+            </li>
+            <li>
+              <ForumIcon />
+              <Typography variant="h6">Присоеденяйтесь к общению.</Typography>
+            </li>
+          </ul>
+        </section>
+        <section className={classes.authSide}>
+          <div className="auth-wrapper">
+            <MessageIcon className={classes.mainLogoIcon} color="primary" />
+            <Typography variant="h3" className={classes.authTitleText}>
+              Узнайте, что происходит в мире прямо сейчас!
+            </Typography>
+            <Typography className={classes.authTitleLabel}>
+              Присоеденяйтесь прямо сейчас!
+            </Typography>
+            <Button variant="contained" color="primary" onClick={() => handleClickOpen('reg')}>
+              Зарегистрироваться
+            </Button>
+            <Button variant="outlined" color="primary" onClick={() => handleClickOpen('auth')}>
+              Войти
+            </Button>
+          </div>
+        </section>
 
-      <AuthPopups
-        classes={classes}
-        openAuth={openAuth}
-        openReg={openReg}
-        handleClose={handleClose}
-      />
-    </div>
+        <AuthPopups
+          classes={classes}
+          openAuth={openAuth}
+          openReg={openReg}
+          handleClose={handleClose}
+        />
+      </div>
+    </>
   );
 };

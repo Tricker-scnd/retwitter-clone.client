@@ -2,7 +2,6 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import rootReducer from './rootReducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './saga';
-import { LoadingState, TweetsState } from './ducks/tweets/contracts/state';
 
 declare global {
   interface Window {

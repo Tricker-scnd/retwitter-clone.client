@@ -13,8 +13,17 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
     },
     paperItemsWrapper: {
-      '& > *': {
+      '& > a': {
         borderBottom: '1px solid #e2e2e2',
+        display: 'block',
+        transition: '0.2s all',
+        '&:hover': {
+          backgroundColor: 'rgba(0,0,0,0.03)',
+        },
+      },
+      '& a': {
+        color: 'inherit',
+        textDecoration: 'none',
       },
     },
     GrayBlockHead: {
@@ -24,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
         fontWeight: 800,
       },
       borderBottom: '1px solid #e2e2e2',
-
     },
     GrayBlockActions: {
       padding: '15px 10px 15px 20px',
@@ -54,9 +62,7 @@ export const GrayBlock = ({ header, showMore, children }: GrayBlockProps): React
       <div className={classes.GrayBlockHead}>
         <Typography variant="h5">{header}</Typography>
       </div>
-      <div className={classes.paperItemsWrapper}>
-          {children}
-        </div>
+      <div className={classes.paperItemsWrapper}>{children}</div>
       <div className={classes.GrayBlockActions} onClick={showMore}>
         <div className={classes.GrayBlockActionShowMore}>Показать еще</div>
       </div>

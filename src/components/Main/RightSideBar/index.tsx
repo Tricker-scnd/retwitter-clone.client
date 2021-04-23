@@ -1,135 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { SearchInput } from './componetns/SearchInput';
-import { GrayBlock } from './componetns/GrayBlock';
-import { IconButton, Avatar, Button } from '@material-ui/core';
-import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
-import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
+import { GrayBlock } from './componetns/GrayBlock/';
+import { ActualThemeItem } from './componetns/GrayBlock/components/ActualThemeItem';
+import { RecomendationItem } from './componetns/GrayBlock/components/RecomendationItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchActualThemes } from '../../../store/ducks/actualThemes/actionCreators';
+import { ActualThemesState, LoadingState } from '../../../store/ducks/actualThemes/contracts/state';
+import {
+  selectActualThemesItems,
+  selectActualThemesLoadingState,
+} from '../../../store/ducks/actualThemes/selectors';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useQuery } from '../../../hooks/SearchQuery.hook';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     rightGridColumnWrapper: {
-      maxWidth:'340px',
+      maxWidth: '340px',
       width: '100%',
       top: 0,
       position: 'sticky',
       paddingTop: '4px',
       margin: '0 auto',
     },
-    ActualThemeItemWrapper: {
-      position: 'relative',
-      padding: '15px 10px 10px 20px',
-    },
-    ActualThemeItemType: {
-      color: theme.palette.text.secondary,
-      fontWeight: 500,
-      fontSize: '13px',
-    },
-    ActualThemeItemHashtag: {
-      fontWeight: 800,
-      marginTop: '3px',
-      fontSize: '16px',
-    },
-    ActualThemeItemCountTweets: {
-      marginTop: '5px',
-      color: theme.palette.text.secondary,
-      fontSize: '13px',
-    },
-    ActualThemeItemActions: {
-      position: 'absolute',
-      right: '10px',
-      top: '10px',
-    },
-    RecomendationItemWrapper: {
-      position: 'relative',
-      padding: '19px 10px 14px 20px',
-      display: 'flex',
-    },
-    RecomendationItemRight: {
-      display: 'flex',
-      flexGrow:1,
-      alignItems:'center',
-      justifyContent:'space-between',
-    },
-    RecomendationItemNameBLock: {
-      marginLeft: '6px',
-    },
-    RecItemName: {
-      fontSize: '15px',
-      fontWeight: 700,
-      display: 'flex',
-      alignItems: 'center',
-      '& svg': {
-        fontSize: '20px',
-      },
-    },
-    RecItemLogin: {
-      fontSize: '14px',
-      fontWeight: 500,
-    },
-    RecItemButton: {
-      padding: '1px 5px',
-      height:'30px',
-      '& span': {
-        fontSize: '12px',
-        fontWeight:600,
-      },
+    CircularLoader: {
+      display: 'block',
+      margin: '20px auto',
     },
   }),
 );
 
-const ActualThemeItem = () => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.ActualThemeItemWrapper}>
-      <div className={classes.ActualThemeItemType}>Бизнес и финансы · Актуально</div>
-      <div className={classes.ActualThemeItemHashtag}>#Bitcoin</div>
-      <div className={classes.ActualThemeItemCountTweets}>Твитов: 172 тыс.</div>
-      <IconButton aria-label="delete" className={classes.ActualThemeItemActions}>
-        <MoreHorizRoundedIcon color="primary" />
-      </IconButton>
-    </div>
-  );
-};
-
-const RecomendationItem = () => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.RecomendationItemWrapper}>
-      <Avatar src="https://pbs.twimg.com/profile_images/1326313041449918464/P7tcCvdd_x96.jpg" />
-      <div className={classes.RecomendationItemRight}>
-        <div className={classes.RecomendationItemNameBLock}>
-          <span className={classes.RecItemName}>
-            100T Hiko <CheckCircleSharpIcon color="primary" />
-          </span>
-          <span className={classes.RecItemLogin}>@Hiko</span>
-        </div>
-        <Button variant="outlined" color="primary" className={classes.RecItemButton}>
-          Читать
-        </Button>
-      </div>
-    </div>
-  );
-};
-
 export const RightSideBar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const [showThemesCount, setShowThemesCount] = useState(3);
+  const history = useHistory();
+  const urlQuery = useQuery();
+  const query = urlQuery.get('q');
 
-  const showMore = () => {
-    alert('show more');
+  const defaultSearchPage = !query
+    ? query === ''
+      ? false
+      : location.pathname.includes('search')
+    : false;
+
+  useEffect(() => {
+    dispatch(fetchActualThemes());
+  }, [dispatch]);
+
+  const showMoreActualThemes = () => {
+    if (actualThemesList.length > 3) {
+      showThemesCount === 6 && history.push('/trends');
+      showThemesCount === 3 && setShowThemesCount(6);
+      return;
+    }
+    history.push('/trends');
   };
+  const showMoreRecommendUsers = () => {};
+
+  const actualThemesList: ActualThemesState['items'] = useSelector(selectActualThemesItems);
+  const actualThemesLoading: boolean =
+    useSelector(selectActualThemesLoadingState) === LoadingState.LOADING;
 
   return (
     <div className={classes.rightGridColumnWrapper}>
-      <SearchInput />
-      <GrayBlock showMore={showMore} header={'Актуальные темы для вас'}>
-        <ActualThemeItem />
-        <ActualThemeItem />
-        <ActualThemeItem />
+      {!defaultSearchPage && <SearchInput />}
+
+      <GrayBlock showMore={showMoreActualThemes} header={'Актуальные темы для вас'}>
+        {actualThemesLoading ? (
+          <CircularProgress className={classes.CircularLoader} disableShrink />
+        ) : (
+          actualThemesList?.slice(0, showThemesCount).map((theme, i) => (
+            <Link to={`/search?q=%23${theme.tag}`} key={theme._id}>
+              <ActualThemeItem actualTheme={theme} />
+            </Link>
+          ))
+        )}
       </GrayBlock>
-      <GrayBlock showMore={showMore} header={'Кого читать'}>
+
+      <GrayBlock showMore={showMoreRecommendUsers} header={'Кого читать'}>
         <RecomendationItem />
         <RecomendationItem />
         <RecomendationItem />

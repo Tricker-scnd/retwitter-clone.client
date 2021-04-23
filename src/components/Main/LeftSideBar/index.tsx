@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Hidden, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Hidden, Typography } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
@@ -17,6 +17,13 @@ import Fade from '@material-ui/core/Fade';
 import CloseIcon from '@material-ui/icons/Close';
 import { TweetCreate } from '../Tweet/create';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {
+  selectAuthorizeStatus,
+  selectCurrentUserInfo,
+} from '../../../store/ducks/currentUser/selectors';
+import { CurrentUserBlock } from './components/CurrentUserBlock';
+import { AuthorizeResultState } from '../../../store/ducks/currentUser/contracts/state';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 auto',
       [theme.breakpoints.down('xs')]: {
         padding: '0px',
-        marginLeft: '10px',
+        marginLeft: 'auto',
       },
     },
     modal: {
@@ -58,6 +65,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'flex-start',
 
+      '& a': {
+        color: 'inherit',
+        textDecoration: 'none',
+      },
       [theme.breakpoints.down('sm')]: {
         alignItems: 'center',
       },
@@ -94,6 +105,12 @@ const useStyles = makeStyles((theme: Theme) =>
       '& h6': {
         fontSize: '19px',
         fontWeight: 700,
+        [theme.breakpoints.down('lg')]: {
+          fontSize: '17px',
+        },
+        [theme.breakpoints.down('md')]: {
+          fontSize: '16px',
+        },
       },
       '& a': {
         display: 'flex',
@@ -131,7 +148,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
-
+    disabledLink: {
+      opacity: '0.5',
+      pointerEvents: 'none',
+    },
+    contentLoader: {
+      margin: '10px auto',
+      display: 'block',
+    },
     createTweetModalWrapper: {
       padding: '10px 0px 30px 0px',
       borderRadius: '10px',
@@ -168,15 +192,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface SideBarMenuProps {
-  userInfo: any;
-}
+export const SideBarMenu = (): React.ReactElement => {
+  const isAuth = useSelector(selectAuthorizeStatus);
 
-export const SideBarMenu: React.FC<SideBarMenuProps> = ({
-  userInfo,
-}: SideBarMenuProps): React.ReactElement => {
   const classes = useStyles();
-
   const [visibleAddPopup, setVisibleAddPopup] = React.useState(false);
 
   const openAddTweetPopup = () => {
@@ -185,6 +204,7 @@ export const SideBarMenu: React.FC<SideBarMenuProps> = ({
   const closeAddTweetPopup = () => {
     setVisibleAddPopup(false);
   };
+  const userInfo = useSelector(selectCurrentUserInfo);
 
   return (
     <React.Fragment>
@@ -205,7 +225,7 @@ export const SideBarMenu: React.FC<SideBarMenuProps> = ({
               <CloseIcon color="primary" />
             </IconButton>
             <hr></hr>
-            <TweetCreate userInfo={userInfo} />
+            <TweetCreate />
             <hr></hr>
           </div>
         </Fade>
@@ -215,52 +235,62 @@ export const SideBarMenu: React.FC<SideBarMenuProps> = ({
         <ul className={classes.leftMenuLinks}>
           <li className={classes.letfMenuLinksItem}>
             <IconButton aria-label="Logo" className={classes.logoButton}>
-              <Link to="/">
+              <Link to="/home">
                 <MessageIcon color="primary" className={classes.mainLogo} />
               </Link>
             </IconButton>
           </li>
           <li className={classes.letfMenuLinksItem}>
-            <HomeRoundedIcon color="primary" className={classes.menuIcon} />
-            <Hidden smDown>
-              <Typography variant="h6">Главная</Typography>
-            </Hidden>
+            <Link to="/home">
+              <HomeRoundedIcon color="primary" className={classes.menuIcon} />
+              <Hidden smDown>
+                <Typography variant="h6">Главная</Typography>
+              </Hidden>
+            </Link>
           </li>
           <li className={classes.letfMenuLinksItem}>
-            <SearchRoundedIcon color="primary" className={classes.menuIcon} />
-            <Hidden smDown>
-              <Typography variant="h6">Поиск</Typography>
-            </Hidden>
+            <Link to={`/search`}>
+              <SearchRoundedIcon color="primary" className={classes.menuIcon} />
+              <Hidden smDown>
+                <Typography variant="h6">Поиск</Typography>
+              </Hidden>
+            </Link>
           </li>
-          <li className={classes.letfMenuLinksItem}>
+          <li className={classes.letfMenuLinksItem + ' ' + classes.disabledLink}>
             <NotificationsIcon color="primary" className={classes.menuIcon} />
             <Hidden smDown>
               <Typography variant="h6">Уведомления</Typography>
             </Hidden>
           </li>
-          <li className={classes.letfMenuLinksItem}>
+          <li className={classes.letfMenuLinksItem + ' ' + classes.disabledLink}>
             <EmailIcon color="primary" className={classes.menuIcon} />
             <Hidden smDown>
               <Typography variant="h6">Сообщения</Typography>
             </Hidden>
           </li>
           <li className={classes.letfMenuLinksItem}>
-            <BookmarkBorderIcon color="primary" className={classes.menuIcon} />
-            <Hidden smDown>
-              <Typography variant="h6">Закладки</Typography>
-            </Hidden>
+            <Link to={`/favorite`}>
+              <BookmarkBorderIcon color="primary" className={classes.menuIcon} />
+              <Hidden smDown>
+                <Typography variant="h6">Закладки</Typography>
+              </Hidden>
+            </Link>
           </li>
           <li className={classes.letfMenuLinksItem}>
-            <ListAltIcon color="primary" className={classes.menuIcon} />
-            <Hidden smDown>
-              <Typography variant="h6">Списки</Typography>
-            </Hidden>
+            <Link to={`/users`}>
+              <ListAltIcon color="primary" className={classes.menuIcon} />
+              <Hidden smDown>
+                <Typography variant="h6">Списки</Typography>
+              </Hidden>
+            </Link>
           </li>
           <li className={classes.letfMenuLinksItem}>
-            <PersonIcon color="primary" className={classes.menuIcon} />
-            <Hidden smDown>
-              <Typography variant="h6">Профиль</Typography>
-            </Hidden>
+            <Link to={`/${userInfo?.login}`}>
+              <PersonIcon color="primary" className={classes.menuIcon} />
+              <Hidden smDown>
+                <Typography variant="h6">Профиль</Typography>
+              </Hidden>
+            </Link>
           </li>
           <li className={classes.letfMenuLinksItem}>
             <MoreHorizIcon color="primary" className={classes.menuIcon} />
@@ -278,6 +308,11 @@ export const SideBarMenu: React.FC<SideBarMenuProps> = ({
             </Button>
           </li>
         </ul>
+        {isAuth === AuthorizeResultState.SUCCESS ? (
+          <CurrentUserBlock userInfo={userInfo!} />
+        ) : (
+          <CircularProgress className={classes.contentLoader} disableShrink />
+        )}
       </div>
     </React.Fragment>
   );

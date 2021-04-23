@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Typography, AppBar, Toolbar, Hidden } from '@material-ui/core';
+import React from 'react';
+import { Container, Hidden } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { TweetItem } from '../components/Main/Tweet';
 import { SideBarMenu } from '../components/Main/LeftSideBar';
-import { TweetCreate } from '../components/Main/Tweet/create';
 import { RightSideBar } from '../components/Main/RightSideBar';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTweets } from '../store/ducks/tweets/actionCreators';
-import { LoadingState, TweetsState } from '../store/ducks/tweets/contracts/state';
-import { selectLoadingState, selectTweetsItems } from '../store/ducks/tweets/selectors';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Route, Switch } from 'react-router';
+import { MainTopBar } from '../components/Main/common/MainTopBar';
+import { FullTweet } from './components/FullTweet';
+import { ProfilePage } from './components/Profile';
+import { SearchPage } from './components/SearchPage';
+import { Main } from './components/Main';
+import { ActualThemes } from './components/ActualThemes';
+import { FavoritePage } from './components/FavoritePage';
+import { UsersPage } from './components/UsersPage';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,6 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
       '& h1': {
         backgroundColor: '#999',
       },
+      '& a': {
+        textDecoration: 'none',
+      },
+      minHeight: '101%',
     },
     baseWrapper: {
       height: '100vh',
@@ -50,83 +56,79 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('xs')]: {
         padding: '0px 0px 0px 1px!important',
       },
+      [theme.breakpoints.down('lg')]: {},
     },
     rightColumnGrid: {
       paddingTop: '12px',
       padding: '0px 0px 0px 2px!important',
       backgroundColor: '#fff',
       flexGrow: 1,
+      boxSizing: 'border-box',
+      [theme.breakpoints.down('lg')]: {
+        padding: '0px 0px 0px 10px!important',
+      },
     },
     centerColumnGrid: {
       borderLeft: '1px solid rgb(65, 90, 78, 0.12);',
       borderRight: '1px solid rgb(65, 90, 78, 0.12);',
       position: 'relative',
       padding: '0px !important',
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#fff',
     },
 
-    feedColumnHeadBar: {
-      position: 'sticky',
-      boxShadow: 'none',
-      borderBottom: '1px solid rgb(65, 90, 78, 0.12);',
-      marginBottom: '0px',
-      '& h6': {
-        paddingLeft: '8px',
-      },
-    },
     tweetsFeed: {},
     TweetsLoader: {
       display: 'block',
       margin: '0 auto',
+    },
+    delimetr: {
+      backgroundColor: 'rgb(247, 249, 250)',
+      height: '12px',
+      borderBottom: '1px solid rgb(235, 238, 240)',
     },
   }),
 );
 
 export const Home = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchTweets());
-  }, [dispatch]);
-
-  const tweetsList: TweetsState['items'] = useSelector(selectTweetsItems);
-  const tweetsLoading: boolean = useSelector(selectLoadingState) === LoadingState.LOADING;
-
-
-  const userInfo = {
-    userName: 'Maikel Bill',
-    login: '@maikelele',
-    published: '01.02.2021',
-    avatarUrl: 'https://pbs.twimg.com/profile_images/1246806429073387520/L8ZaoO8__x96.jpg',
-  };
 
   return (
     <Container className={classes.baseWrapper} maxWidth="xl">
       <Grid container className={classes.root} justify="center">
         <Grid item xs={2} sm={3} md={3} lg={2} xl={2} className={classes.leftColumnGrid}>
-          <SideBarMenu userInfo={userInfo} />
+          <SideBarMenu />
         </Grid>
 
-        <Grid item xs={10} sm={9} md={7} lg={4} xl={4} className={classes.centerColumnGrid}>
-          <AppBar className={classes.feedColumnHeadBar} color="secondary">
-            <Toolbar>
-              <Typography variant="h6">Главная</Typography>
-            </Toolbar>
-          </AppBar>
-          <TweetCreate userInfo={userInfo} />
-          <div className={classes.tweetsFeed}>
-            {tweetsLoading ? (
-              <CircularProgress className={classes.TweetsLoader} disableShrink />
-            ) : (
-              tweetsList.map((t, i) => (
-                <TweetItem userInfo={t.user} textTweet={t.text} key={t._id + '_' + i} />
-              ))
-            )}
-          </div>
+        <Grid item xs={10} sm={9} md={6} lg={5} xl={4} className={classes.centerColumnGrid}>
+          <Switch>
+            <Route path={['/home', '/']} exact>
+              <MainTopBar text={'Главная'} arrowBack={false} />
+              <Main />
+            </Route>
+            <Route path="/search">
+              <SearchPage />
+            </Route>
+            <Route path="/trends">
+              <ActualThemes />
+            </Route>
+            <Route path="/favorite">
+              <FavoritePage />
+            </Route>
+            <Route path="/users">
+              <UsersPage />
+            </Route>
+            <Route path="/*/status/*">
+              <MainTopBar text={'Твитнуть'} arrowBack={true} />
+              <FullTweet />
+            </Route>
+            <Route path="/:login" exact>
+              <ProfilePage />
+            </Route>
+          </Switch>
         </Grid>
 
         <Hidden smDown>
-          <Grid item lg={3} xl={3} className={classes.rightColumnGrid}>
+          <Grid item md={3} lg={3} xl={3} className={classes.rightColumnGrid}>
             <RightSideBar />
           </Grid>
         </Hidden>

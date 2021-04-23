@@ -1,12 +1,16 @@
 import React from 'react';
 import { Typography, Paper, Avatar, IconButton, Grid } from '@material-ui/core';
-import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
 import ChatBubbleOutlineRoundedIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
 import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
-import MoreHorizRoundedIcon from '@material-ui/icons/MoreHorizRounded';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import { UserInfo } from './components/UserInfo';
+import { MenuMore } from './components/MenuMore';
+import { Tweet } from '../../../store/ducks/tweets/contracts/state';
+import { ActionsBlock } from './components/ActionsBlock';
+import { pinState } from '../../../store/ducks/tweet/contracts/state';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,8 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
       transition: '0.1s all',
       boxShadow: 'none',
       cursor: 'pointer',
+      textDecoration: 'none',
       '&:hover': {
-        backgroundColor: 'rgb(245,248,250)',
+        backgroundColor: 'rgb(112 ,150 ,137 , 0.06)',
       },
     },
     tweetLeftSide: {},
@@ -30,26 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
     userAvatar: {
       color: theme.palette.primary.contrastText,
       backgroundColor: theme.palette.primary.main,
-      width: '60px',
-      height: '60px',
+      width: '50px',
+      height: '50px',
       margin: '0 auto',
     },
-    tweetUserInfo: {
-      display: 'flex',
-      alignItems: 'center',
-      '& b': {
-        marginRight: '8px',
-        fontSize: '16px',
-      },
-    },
-    tweetUserInfoLogin: {
-      fontWeight: 600,
-      marginLeft: '5px',
-      color: '#888',
-      fontSize: '15px',
-    },
     tweetContentBlock: {
-      marginTop: '6px',
+      marginTop: '9px',
     },
     tweetContentBlockSimpleText: {
       lineHeight: '19px',
@@ -83,79 +74,138 @@ const useStyles = makeStyles((theme: Theme) =>
     tweetActionIcon: {
       fontSize: '20px',
     },
-    tweetMoreActionsButton: {
-      marginTop: '-6px',
-      padding: '6px',
+
+    tweetImagesBlock: {
+      maxHeight: '620px',
+      marginTop: '20px',
+      borderRadius: '12px',
+      overflow: 'hidden',
+      border: '2px solid rgba(0,0,0,0.04)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      transition: '0.15s all',
       '&:hover': {
-        color: theme.palette.primary.main,
+        border: '2px solid rgba(0,0,0,0.1)',
+      },
+      flexWrap: 'wrap',
+    },
+    tweetImagesBlockItem: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexBasis: '49%',
+      maxHeight: '300px',
+      minHeight: '104px',
+      backgroundColor: 'rgb(253,253,253)',
+      boxShadow: '0px 0px 3px rgba(0,0,0,0.07)',
+      '&:hover': {
+        filter: 'brightness(98%)',
+      },
+      '&:nth-child(3)': {
+        marginTop: '5px',
+      },
+      '&:nth-child(4)': {
+        marginTop: '5px',
+      },
+      '& img': {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
       },
     },
   }),
 );
 
 interface TweetProps {
-  userInfo: any;
-  textTweet: string;
+  TweetInfo: Tweet;
+  handleTweetClick?: any;
+  ownTweet: boolean;
+  handleDeleteTweet: Function;
+  listKey: number;
+  noActions?: boolean;
+  pinnedTweet?: String;
+  openPinNotification: () => void;
+  shareLink: (e: any, link: string) => void;
+  pinTweet: (e: any, id: string, t: pinState) => void;
+  likeHandler: (
+    e: React.MouseEvent<HTMLElement>,
+    pageFullTweet: boolean,
+    fullTweetData: Tweet,
+    idTweet?: string,
+    tweetListKey?: number,
+  ) => void;
 }
 
 export const TweetItem: React.FC<TweetProps> = ({
-  userInfo,
-  textTweet,
+  TweetInfo,
+  handleTweetClick,
+  ownTweet,
+  handleDeleteTweet,
+  listKey,
+  likeHandler,
+  shareLink,
+  noActions,
+  pinTweet,
+  pinnedTweet,
+  openPinNotification,
 }: TweetProps): React.ReactElement => {
   const classes = useStyles();
+  const openGallery = (e: any) => {
+    // e.preventDefault();
+    // e.stopPropagation();
+  };
 
   return (
-    <Paper className={classes.tweetItemRoot}>
+    <Paper className={classes.tweetItemRoot} onClick={handleTweetClick}>
       <Grid container spacing={2}>
         <Grid item xs={2} className={classes.tweetLeftSide}>
-          <Avatar
-            alt="User avatar"
-            src={userInfo.avatarUrl}
-            className={classes.userAvatar}></Avatar>
+          <Link to={`/${TweetInfo.user.login}`}>
+            <Avatar
+              alt="User avatar"
+              src={TweetInfo.user.avatarSrc}
+              className={classes.userAvatar}></Avatar>
+          </Link>
         </Grid>
+
         <Grid item xs={9} className={classes.tweetRightSide}>
-          <div className={classes.tweetUserInfo}>
-            <b>{userInfo.userName}</b>
-            <CheckCircleSharpIcon color="primary" />
-            <Typography className={classes.tweetUserInfoLogin}>
-              {userInfo.login} · {userInfo.published}
-            </Typography>
-          </div>
+          <UserInfo userInfo={TweetInfo.user} publishedDate={TweetInfo.publishedDate!} />
 
           <div className={classes.tweetContentBlock}>
-            <Typography className={classes.tweetContentBlockSimpleText}>{textTweet}</Typography>
+            <Typography className={classes.tweetContentBlockSimpleText}>
+              {TweetInfo.text}
+            </Typography>
+
+            {TweetInfo.images?.length ? (
+              <div className={classes.tweetImagesBlock} onClick={openGallery}>
+                {TweetInfo.images.map((url, i) => (
+                  <div className={classes.tweetImagesBlockItem} key={url + i}>
+                    <img data-zoomable src={url} alt="image" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
 
-          <div className={classes.tweetActionsBlock}>
-            <div className={classes.tweetActionsBlockItem}>
-              <IconButton aria-label="comment" className={classes.tweetActionsBlockItemButton}>
-                <ChatBubbleOutlineRoundedIcon className={classes.tweetActionIcon} />
-              </IconButton>
-              <span>3 тыс.</span>
-            </div>
-            <div className={classes.tweetActionsBlockItem}>
-              <IconButton aria-label="repost" className={classes.tweetActionsBlockItemButton}>
-                <RepeatRoundedIcon className={classes.tweetActionIcon} />
-              </IconButton>
-              <span>3.5 тыс.</span>
-            </div>
-            <div className={classes.tweetActionsBlockItem}>
-              <IconButton aria-label="like" className={classes.tweetActionsBlockItemButton}>
-                <FavoriteBorderRoundedIcon className={classes.tweetActionIcon} />
-              </IconButton>
-              <span>6 тыс.</span>
-            </div>
-            <div className={classes.tweetActionsBlockItem}>
-              <IconButton aria-label="share" className={classes.tweetActionsBlockItemButton}>
-                <ReplyRoundedIcon className={classes.tweetActionIcon} />
-              </IconButton>
-            </div>
-          </div>
+          {!noActions && (
+            <ActionsBlock
+              fullTweetData={TweetInfo}
+              tweetListKey={listKey}
+              likeHandler={likeHandler}
+              shareHandler={shareLink}
+            />
+          )}
         </Grid>
         <Grid item xs={1}>
-          <IconButton aria-label="delete" className={classes.tweetMoreActionsButton}>
-            <MoreHorizRoundedIcon />
-          </IconButton>
+          <MenuMore
+            data-menuMore
+            ownTweet={ownTweet}
+            pinTweet={pinTweet}
+            pinnedInfo={{ pinned: pinnedTweet === TweetInfo._id, id: TweetInfo._id }}
+            handleDeleteTweet={() => handleDeleteTweet(TweetInfo._id)}
+            openPinNotification={openPinNotification}
+          />
         </Grid>
       </Grid>
     </Paper>
